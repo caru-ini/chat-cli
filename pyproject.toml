@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "chat-cli"
+version = "0.1.0"
+description = "ChatGPT API CLI"
+authors = ["caru-ini <caru17122@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+openai = "^1.41.0"
+rich = "^13.7.1"
+pydantic = "^2.8.2"
+python-dotenv = "^1.0.1"
+prompt-toolkit = "^3.0.47"
+duckduckgo-search = "^6.2.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+main = "chat_cli.__main__:main"
