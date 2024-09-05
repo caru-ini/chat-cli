@@ -154,9 +154,6 @@ class ChatSession:
                         )
                     break
 
-            # Final response
-            ui_buffer.append("\n\nFinal response:\n")
-            ui_buffer.append(self.messages[-1]["content"])
             update_ui()
 
     def __str__(self):
