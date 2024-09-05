@@ -75,7 +75,11 @@ def main():
 
     try:
         while True:
-            user_input = prompt("You (help: ?)> ", completer=command_completer)
+            user_input = prompt(
+                "You (help: ?)> ",
+                completer=command_completer,
+                complete_while_typing=False,
+            )
             match user_input:
                 case "q":
                     break
