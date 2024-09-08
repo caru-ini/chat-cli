@@ -4,16 +4,16 @@ The Chat CLI is a command-line interface for interacting with OpenAI's models in
 
 ## Features
 
-- **Create New Sessions**: Start new chat sessions.
-- **List Sessions**: View all existing chat sessions.
-- **Select Session**: Switch to a different chat session.
-- **Delete Session**: Delete existing chat sessions.
+- **Multiple Sessions**: Create and manage multiple chat sessions.
+- **Realtime Response**: All LLM responses are displayed in real-time.
 - **Toggle Tools**: Enable or disable tools within a session.
-- **List Loaded Tools**: Display all tools loaded in the current session.
 - **Change Model**: Switch to a different OpenAI model for the session.
-- **Rich Command Line Interface**: Uses `prompt_toolkit` for auto-completion and `rich` for enhanced terminal output.
+- **Rich Output**: Markdown in responses is rendered in the terminal. (with `rich`)
+- **Auto-Complete**: Press Tab for auto-completion of commands, session IDs. (with `prompt-toolkit`)
 
-To rewrite the Chat CLI installation and usage guide with Poetry, follow these steps.
+## Screenshot(s)
+
+![Screenshot](images/screenshot-1.png)
 
 ## Installation
 
