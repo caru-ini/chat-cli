@@ -28,5 +28,5 @@ class SearchTool(BaseTool):
             return {"error": "No query provided."}
 
         async with AsyncDDGS() as ddgs:
-            results = await ddgs.text(query)
+            results = ddgs.text(query)
             return results[0]

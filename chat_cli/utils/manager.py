@@ -14,8 +14,9 @@ class ChatSessionManager:
         self.current_session = session_id
         return session_id
 
-    def get_current_session(self) -> ChatSession:
-        return self.sessions.get(self.current_session)
+    def get_current_session(self) -> ChatSession | None:
+        if self.current_session:
+            return self.sessions[self.current_session]
 
     def list_sessions(self) -> list:
         return list(self.sessions.keys())

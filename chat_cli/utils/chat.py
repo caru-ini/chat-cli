@@ -4,7 +4,7 @@ from pathlib import Path
 from uuid import uuid4
 
 import openai
-from openai.types.chat import ChatCompletionMessageParam, ChatCompletionStream
+from openai.types.chat import ChatCompletionMessageParam
 from rich import print as rprint
 from rich.console import Console
 from rich.live import Live
@@ -13,14 +13,14 @@ from rich.panel import Panel
 
 from .tool_loader import load_tools, to_openai_format
 
-PKG_PATH = Path(__file__).parent
+PKG_PATH = Path(__file__).parent.parent
 
 
 class ChatSession:
     def __init__(self, chat_id=None, messages=None, model=None):
         self.chat_id = chat_id or str(uuid4())
         self.model = model or "gpt-4o-mini"
-        self.messages = messages or [
+        self.messages: list[ChatCompletionMessageParam] = messages or [
             {
                 "role": "system",
                 "content": f"""You are a chat AI assistant. When you use a tool, carefully read and incorporate the 'Tool results' message in your response.
@@ -48,7 +48,7 @@ class ChatSession:
         return self.chat_id
 
     def send_message(
-        self, message: ChatCompletionMessageParam, console: Console = None
+        self, message: ChatCompletionMessageParam, console: Console | None = None
     ):
         _console = console or Console()
         content = Markdown("")
@@ -72,16 +72,18 @@ class ChatSession:
                 def update_ui():
                     live.update(Panel(Markdown("".join(ui_buffer)), expand=False))
 
-                stream: ChatCompletionStream = openai.chat.completions.create(
-                    model=self.model,
-                    messages=self.messages,
-                    stream=True,
-                    tools=(
+                params = {
+                    "model": self.model,
+                    "messages": self.messages,
+                    "tools": (
                         [to_openai_format(tool) for tool in self.tools]
                         if self.tools and tool_fail_count <= 1
                         else None
                     ),
-                )
+                    "stream": True,
+                }
+
+                stream = openai.chat.completions.create(**params)
 
                 for chunk in stream:
                     if chunk.choices[0].delta.tool_calls:
@@ -133,7 +135,7 @@ class ChatSession:
 
                 # Message buffer
                 if buffer:
-                    assistant_message = {
+                    assistant_message: ChatCompletionMessageParam = {
                         "role": "assistant",
                         "content": "".join(buffer),
                     }
@@ -141,7 +143,7 @@ class ChatSession:
 
                 # Tool results buffer
                 if tool_results:
-                    tool_result_message = {
+                    tool_result_message: ChatCompletionMessageParam = {
                         "role": "system",
                         "content": f"Tool results:\n{json.dumps(tool_results, indent=2)}\n\nPlease incorporate this information in your response.",
                     }

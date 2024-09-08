@@ -5,10 +5,11 @@ import inspect
 from abc import ABC, abstractmethod
 from logging import getLogger
 from pathlib import Path
-from typing import Any, Iterable, List
+from typing import Any, Type
 
-from openai.types.chat import ChatCompletionToolParam
 from pydantic import BaseModel
+
+# model meta class
 
 logger = getLogger(__name__)
 
@@ -16,7 +17,7 @@ logger = getLogger(__name__)
 class BaseTool(ABC):
     name: str
     description: str
-    schema: BaseModel
+    schema: Type[BaseModel]
 
     @abstractmethod
     def run(self, *args, **kwargs) -> Any:
@@ -27,7 +28,7 @@ class BaseTool(ABC):
         pass
 
 
-def load_tools(path: Path, tools: List[str] = []) -> Iterable[BaseTool]:
+def load_tools(path: Path, tools: list[str] = []) -> list[BaseTool]:
     """
     Load the tools from the specified path and return them as a dictionary.
 
@@ -36,10 +37,10 @@ def load_tools(path: Path, tools: List[str] = []) -> Iterable[BaseTool]:
     tools (list[str]): A list of tool names to load.
 
     Returns:
-    Iterable[BaseTool]: An iterable of tool instances.
+    list[BaseTool]: A list of loaded tools.
     """
     load_all = not tools
-    loaded_tools: List[ChatCompletionToolParam] = []
+    loaded_tools: list[BaseTool] = []
     error_tools = []
 
     for file in path.rglob("*.py"):
@@ -90,7 +91,7 @@ def load_tools(path: Path, tools: List[str] = []) -> Iterable[BaseTool]:
     return loaded_tools
 
 
-def to_openai_format(tool) -> ChatCompletionToolParam:
+def to_openai_format(tool) -> dict[str, Any]:
     """
     Convert Tool class to OpenAI tool format.
 
@@ -98,7 +99,7 @@ def to_openai_format(tool) -> ChatCompletionToolParam:
     tool (Any): The tool to convert.
 
     Returns:
-    ChatCompletionToolParam: A dictionary of tool names and their classes.
+    dict[str, Any]: A dictionary of tool names and their classes.
     """
     output = {}
     # get schema from tool
