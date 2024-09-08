@@ -1,16 +1,17 @@
-from uuid import uuid4
-import openai
+import json
+from datetime import datetime
 from pathlib import Path
-from openai.types.chat.chat_completion_message_param import ChatCompletionMessageParam
+from uuid import uuid4
+
+import openai
+from openai.types.chat import ChatCompletionMessageParam, ChatCompletionStream
+from rich import print as rprint
 from rich.console import Console
 from rich.live import Live
 from rich.markdown import Markdown
 from rich.panel import Panel
-from rich import print as rprint
-import json
-from datetime import datetime
 
-from .utils.tool_loader import load_tools, to_openai_format
+from .tool_loader import load_tools, to_openai_format
 
 PKG_PATH = Path(__file__).parent
 
@@ -56,7 +57,7 @@ class ChatSession:
         with Live(
             Panel(content, expand=False),
             refresh_per_second=20,
-            console=console,
+            console=_console,
         ) as live:
             tool_fail_count = 0
             self.messages.append(message)
@@ -71,7 +72,7 @@ class ChatSession:
                 def update_ui():
                     live.update(Panel(Markdown("".join(ui_buffer)), expand=False))
 
-                stream = openai.chat.completions.create(
+                stream: ChatCompletionStream = openai.chat.completions.create(
                     model=self.model,
                     messages=self.messages,
                     stream=True,

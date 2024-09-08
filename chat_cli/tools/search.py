@@ -1,4 +1,4 @@
-from duckduckgo_search import AsyncDDGS, DDGS
+from duckduckgo_search import DDGS, AsyncDDGS
 from pydantic import BaseModel, Field
 
 from ..utils.tool_loader import BaseTool
