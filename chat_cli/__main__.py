@@ -19,6 +19,20 @@ basicConfig(level="ERROR", handlers=[RichHandler(console=console)])
 getLogger("httpx").setLevel("WARNING")
 
 
+def multi_line_prompt(prompt_text, completer=None):
+    lines = []
+    while True:
+        if lines:
+            prompt_text = " " * len(prompt_text)
+        line = prompt(prompt_text, completer=completer, complete_while_typing=False)
+        if line.endswith("\\"):
+            lines.append(line[:-1])
+        else:
+            lines.append(line)
+            break
+    return "\n".join(lines)
+
+
 def main():
     parser = argparse.ArgumentParser(description="OAI Playground")
     parser.add_argument("--version", action="version", version="0.1.0")
@@ -31,10 +45,8 @@ def main():
 
     try:
         while True:
-            user_input = prompt(
-                "You (help: ?)> ",
-                completer=command_completer,
-                complete_while_typing=False,
+            user_input = multi_line_prompt(
+                "You (help: ?)> ", completer=command_completer
             )
             match user_input:
                 case "q":
@@ -71,7 +83,7 @@ def main():
                         else:
                             rprint(f"  {session_id}")
                     completer = WordCompleter(sessions)
-                    result = prompt(
+                    result = multi_line_prompt(
                         "Enter the session ID to select: ", completer=completer
                     )
                     if result:
@@ -88,7 +100,7 @@ def main():
                         else:
                             rprint(f"  {session_id}")
                     completer = WordCompleter([*sessions])
-                    result = prompt(
+                    result = multi_line_prompt(
                         "\nEnter the session ID to delete: ", completer=completer
                     )
                     if result:
@@ -120,7 +132,7 @@ def main():
 
                     models = filter(is_cc_model, openai.models.list())
                     completer = WordCompleter([model.id for model in models])
-                    result = prompt(
+                    result = multi_line_prompt(
                         "Enter the model ID to switch (<Tab> to show list): ",
                         completer=completer,
                     )
