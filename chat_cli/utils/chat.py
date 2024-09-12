@@ -92,6 +92,8 @@ class ChatSession:
                         ]:
                             if function.name == "Search":
                                 tc_name = function.name
+                            elif function.name == "ShellCommand":
+                                tc_name = function.name
                             tc_arg_buffer.append(function.arguments)
                             try:
                                 args = json.loads("".join(tc_arg_buffer))
@@ -116,6 +118,26 @@ class ChatSession:
                                     tool_results["search"] = tool.run(**args)
                                     update_ui()
                                     if tool_results["search"].get("error"):
+                                        tool_fail_count += 1
+                                    else:
+                                        tool_fail_count = 0
+                                else:
+                                    tool_fail_count += 1
+                                    ui_buffer.append("Tool not found.\n")
+                                    update_ui()
+                            elif tc_name == "ShellCommand":
+                                tool = next(
+                                    (
+                                        tool
+                                        for tool in self.tools
+                                        if tool.name == "ShellCommand"
+                                    ),
+                                    None,
+                                )
+                                if tool:
+                                    tool_results["shell_command"] = tool.run(**args)
+                                    update_ui()
+                                    if tool_results["shell_command"].get("error"):
                                         tool_fail_count += 1
                                     else:
                                         tool_fail_count = 0
