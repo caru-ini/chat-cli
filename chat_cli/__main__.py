@@ -22,8 +22,7 @@ getLogger("httpx").setLevel("WARNING")
 def main():
     parser = argparse.ArgumentParser(description="OAI Playground")
     parser.add_argument("--version", action="version", version="0.1.0")
-    parser.add_argument("--config", help="Path to the configuration file")
-    # args = parser.parse_args()
+    parser.parse_args()
 
     session_manager = ChatSessionManager()
     session_manager.new_session()
