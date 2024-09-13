@@ -100,11 +100,13 @@ class ChatSession:
                             except json.JSONDecodeError:
                                 continue
 
-                            ui_buffer.append(f"Running tool: {tc_name}\n {args}\n")
+                            ui_buffer.append(
+                                f"Running tool: {tc_name} \n\n {args} \n\n"
+                            )
                             update_ui()
 
                             if tc_name == "Search":
-                                ui_buffer.append("\nSearching the web...\n\n")
+                                ui_buffer.append("Searching the web...  \n\n")
                                 update_ui()
                                 tool = next(
                                     (
