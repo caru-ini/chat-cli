@@ -74,7 +74,7 @@ class RequestsTool(BaseTool):
         return {"summary": self._summarize_text(text)}
 
     def _process_json(self, json_content: dict) -> dict:
-        return {"summary": f"JSON response with keys: {', '.join(json_content.keys())}"}
+        return {"summary": f"JSON response: {json_content}"}
 
     def _process_text(self, text_content: str) -> dict:
         return {"summary": self._summarize_text(text_content)}
