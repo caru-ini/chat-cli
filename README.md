@@ -100,6 +100,10 @@ Switched to session: 123e4567-e89b-12d3-a456-426614174000
 You (help: ?)> q
 ```
 
+## Support
+
+If you like this project, please give it a ⭐ on GitHub!
+
 ## Contributing
 
 We welcome contributions! Here are some ways you can help:
