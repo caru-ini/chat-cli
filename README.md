@@ -100,6 +100,12 @@ Switched to session: 123e4567-e89b-12d3-a456-426614174000
 You (help: ?)> q
 ```
 
+## Available Tools
+
+- **Search**: Search with DuckDuckGo.
+- **ShellCommand**: Run shell commands (it prompted to get user's approval before running).
+- **Requests**: Make HTTP requests.
+
 ## Support
 
 If you like this project, please give it a ⭐ on GitHub!
